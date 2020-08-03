@@ -1,3 +1,3 @@
 User Function Test
-    MsgInfo("Don't think about purple hippos")
+    MsgInfo("This is amazing")
 Return
