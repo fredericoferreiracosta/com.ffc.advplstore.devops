@@ -1,3 +1,3 @@
 User Function Test
-    ConOut("Don't think about purple hippos")
+    MsgInfo("Don't think about purple hippos")
 Return

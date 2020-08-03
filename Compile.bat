@@ -12,10 +12,10 @@ SET includeFolder=D:\TOTVS\Protheus\Protheus\include
 ECHO "Duplicating %rpo%..."
 CALL :GetPath rpoFolder "%rpo%"
 CD /D %rpoFolder%
-SET newRpoFolder=%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%
+CALL :GetTime currentTime
+SET newRpoFolder=%currentTime%
 MKDIR %newRpoFolder%
 COPY %rpo% %newRpoFolder%
-CD /D %newRpoFolder%
 
 ECHO "Updating appserver.ini to use the new RPO..."
 CALL :GetPath appServerFolder "%appServer%"
@@ -30,11 +30,13 @@ FOR /r %%i in (*.prw *.tlpp) do CALL :Compile %%i
 ECHO "Cleaning up..."
 CALL :CleanUp
 
-EXIT /B %ERRORLEVEL%
+ECHO "Done."
+
+EXIT /b
 
 :Compile
-    %appServer% -compile -files=%~1 -includes=%includeFolder% -env=%environment% -src=%srcFolder%
-EXIT /B 0
+    %appServer% -compile -files=%~1 -includes=%includeFolder% -env=%environment% -src=%rootSrcFolder%
+EXIT /b
 
 :CleanUp
     DEL /S *.errprw
@@ -43,7 +45,7 @@ EXIT /B 0
     DEL /S *.errtlpp
     DEL /S *.erx_tlpp
     DEL /S *.ppx_tlpp
-EXIT /B 0
+EXIT /b
 
 :GetPath
     SET "%1=%~dp2"
@@ -68,5 +70,14 @@ EXIT /b
 EXIT /b
 
 :BackUpFile
-    COPY %~1 %~1.%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%.bak
+    CALL :GetTime currentTime
+    COPY %~1 %~1.%currentTime%.bak
+EXIT /b
+
+:GetTime
+    SET HOUR=%TIME:~0,2%
+    IF "%HOUR:~0,1%" == " " SET HOUR=0%HOUR:~1,1%
+    SET MIN=%TIME:~3,2%
+    SET SEC=%TIME:~6,2%
+    SET "%1=%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%%HOUR%%MIN%%SEC%"
 EXIT /b
