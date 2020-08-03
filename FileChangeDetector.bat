@@ -1,5 +1,6 @@
 @ECHO OFF
 
+:: Change this accordingly
 SET fileToMonitor=C:\Users\Fred\Workspace\com.ffc.advplstore.devops\.git\index
 
 ECHO "Listening for file changes on %fileToMonitor%"
