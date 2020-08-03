@@ -1,0 +1,3 @@
+User Function AnotherExtension
+    ConOut("Another extension")
+Return
